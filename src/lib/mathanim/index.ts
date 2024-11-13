@@ -4,8 +4,8 @@ export class MathAnim {
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
     create: Create;
-    constructor(id: string) {
-        let isInited = true;
+    constructor(canvas: ) {
+        let isInited = false;
         const canvas = document.querySelector(id);
         if (canvas) {
             this.canvas = canvas;
