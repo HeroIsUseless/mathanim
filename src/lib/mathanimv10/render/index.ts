@@ -57,10 +57,22 @@ void main() {
 export class Render {
     private mathAnim: MathAnim;
     private gl: WebGLRenderingContext | null;
+    isInited: boolean = false;
     constructor(
         mathAnim: MathAnim
     ) {
+        let isInited = false;
         this.mathAnim = mathAnim;
-        if (this.mathAnim.ca)
+        if (this.mathAnim?.canvas) {
+            const canvas = this.mathAnim?.canvas;
+            const gl = canvas.getContext("webgl");
+            if (gl) {
+                this.gl = gl;
+                isInited = true;
+            } else {
+                throw new Error("WebGL not supported");
+            }
+        }
+        this.isInited = isInited;
     }
 }

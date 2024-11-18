@@ -1,6 +1,7 @@
 import { vec4 } from "gl-matrix";
 import { Create } from "./api/create";
 import { Render } from "./render";
+import { Data } from "./data";
 
 const vertexShaderCode = `
 // 一个属性值，将会从缓冲中获取数据
@@ -73,7 +74,8 @@ const colors = [
 ];
 
 export class MathAnim {
-    private canvas: HTMLCanvasElement | null;
+    public canvas: HTMLCanvasElement | null;
+    private data: Data | null;
     private render: Render | null;
     private gl: WebGLRenderingContext | null;
 
@@ -85,19 +87,12 @@ export class MathAnim {
         const canvas: HTMLCanvasElement | null = document.querySelector(id);
         if (canvas) {
             this.canvas = canvas;
+            this.data = new Data(this);
             this.render = new Render(this);
-            const gl = canvas.getContext("webgl");
-            if (gl) {
-                this.gl = gl;
-                isInited = true;
-            } else {
-                throw new Error("WebGL not supported");
-            }
         } else {
             throw new Error("Canvas not found");
         }
-        this.isInited = isInited;
-        console.log('init mathanim', isInited);
+        this.isInited = isInited && this.render?.isInited;
     }
 
     createRectangle(options?: {
