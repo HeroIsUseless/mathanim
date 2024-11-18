@@ -82,7 +82,7 @@ export function useEngine() {
                 mathAnim.createRectangle({
                     x: 10,
                     y: 10,
-                    backgroundColor: [0, 0, 255, 1]
+                    backgroundColor: [125, 125, 255, 1]
                 });
             }
         };
