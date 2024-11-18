@@ -79,11 +79,11 @@ export function useEngine() {
         image.onload = function(e) {
             const mathAnim = new MathAnim('#glcanvas');
             if (mathAnim.isInited) {
-                mathAnim.initShaders(vertexShaderCode, fragmentShaderCode);
-                mathAnim.setBuffer("a_position", vertices);
-                mathAnim.setBuffer("a_color", colors);
-                mathAnim.setUniform("u_resolution");
-                mathAnim.draw();
+                mathAnim.createRectangle({
+                    x: 10,
+                    y: 10,
+                    backgroundColor: [0, 0, 255, 1]
+                });
             }
         };
     }, []);
