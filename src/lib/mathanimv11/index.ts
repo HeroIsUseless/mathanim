@@ -21,7 +21,6 @@ export class MathAnim {
             throw new Error("Canvas not found");
         }
         this.isInited = isInited && this.data?.isInited && this.render?.isInited;
-        console.log("isInited", isInited, this.data?.isInited, this.render?.isInited);
         if (this.isInited) {
             this.workLoop();
         }
@@ -34,7 +33,11 @@ export class MathAnim {
         });
     }
 
-    createRectangle(options?: {
+    get rootNode(): Node | undefined {
+        return this.data?.tree;
+    }
+
+    createNode(options: {
         x?: number;
         y?: number;
         width?: number;
@@ -47,7 +50,7 @@ export class MathAnim {
             backgroundColor: options?.backgroundColor || vec4.fromValues(1, 0, 0, 1),
             children: []
         }
-        this.data?.tree?.children?.push(node);
+        return node;
     }
 
 }

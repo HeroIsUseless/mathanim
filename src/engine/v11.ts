@@ -9,16 +9,20 @@ export function useEngine() {
             const mathAnim = new MathAnim('#glcanvas');
             console.log('mathAnim.isInited', mathAnim.isInited);
             if (mathAnim.isInited) {
-                mathAnim.createRectangle({
+                const node1 = mathAnim.createNode({
                     x: 10,
                     y: 10,
                     backgroundColor: [125, 125, 255, 1]
                 });
-                mathAnim.createRectangle({
+                const node2 = mathAnim.createNode({
                     x: 120,
                     y: 120,
                     backgroundColor: [125, 125, 255, 1]
                 });
+                const rootNode = mathAnim.rootNode;
+                if (rootNode) {
+                    rootNode.children?.push(node1, node2);
+                }
             }
         };
     }, []);
