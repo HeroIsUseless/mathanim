@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { useEngine } from './engine/v7'
+import { useEngine } from './engine/v8'
 
 function App() {
   useEngine()
