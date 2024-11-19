@@ -2,7 +2,7 @@ export class Recorder {
     private recorder: MediaRecorder | null;
     constructor(canvas: HTMLCanvasElement) {
         const stream = canvas.captureStream();
-        this.recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        this.recorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
         const data: Blob[] = [];
         this.recorder.ondataavailable = function (event) {
             if (event.data && event.data.size) {
@@ -11,7 +11,7 @@ export class Recorder {
         };
         this.recorder.onstop = () => {
             console.log("recorder.onstop");
-            const url = URL.createObjectURL(new Blob(data, { type: 'video/webm' }));
+            const url = URL.createObjectURL(new Blob(data, { type: 'video/mp4' }));
             const video = document.querySelector("video");
             if (video) {
                 video.src = url;
