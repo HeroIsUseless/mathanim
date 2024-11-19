@@ -1,5 +1,5 @@
 import './App.css'
-import { useEngine } from './engine/v11'
+import { useEngine } from './engine/v12'
 
 function App() {
   useEngine()
@@ -10,6 +10,12 @@ function App() {
           你的浏览器似乎不支持或者禁用了 HTML5 <code>&lt;canvas&gt;</code> 元素。
         </canvas>
         <div id='test-img'></div>
+        <div id='videoContainer'>    <video width="300"
+           height="300"
+           controls="true"
+           autoPlay="true"
+           id="video"
+           ></video></div>
       </div>
     </>
   )
