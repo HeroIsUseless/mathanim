@@ -3,13 +3,14 @@ import { Create } from "./api/create";
 import { Render } from "./render";
 import { Data, Node } from "./data";
 import { State } from "./state";
+import { Recorder } from "./recorder";
 
 export class MathAnim {
     public canvas: HTMLCanvasElement | null;
     private data: Data | null;
     private render: Render | null;
     private state: State | null;
-    public recorder: MediaRecorder | null;
+    public recorder: Recorder | null;
     isInited: boolean = false;
     create: Create;
     constructor(id: string) {
@@ -20,7 +21,7 @@ export class MathAnim {
             this.data = new Data(this);
             this.render = new Render(this);
             this.state = new State();
-            this.initRecorder();
+            this.recorder = new Recorder(canvas);
             isInited = true;
         } else {
             throw new Error("Canvas not found");
@@ -99,25 +100,4 @@ export class MathAnim {
         })
     }
 
-    initRecorder() {
-        if (this.canvas) {
-            const stream = this.canvas.captureStream();
-            this.recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-            console.log("initRecorder", stream, this.recorder);
-            const data: Blob[] = [];
-            this.recorder.ondataavailable = function (event) {
-                if (event.data && event.data.size) {
-                    data.push(event.data);
-                }
-            };
-            this.recorder.onstop = () => {
-                console.log("recorder.onstop");
-                const url = URL.createObjectURL(new Blob(data, { type: 'video/webm' }));
-                document.querySelector("#videoContainer").style.display = "block";
-                document.querySelector("video").src = url;
-            };
-        }
-    }
-    recordEnd() { }
-    exportToMP4() { }
 }
