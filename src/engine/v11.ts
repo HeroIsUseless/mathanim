@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { MathAnim } from "../lib/mathanimv11";
+import { vec2 } from "gl-matrix";
 
 export function useEngine() {
     useEffect(() => {
@@ -23,6 +24,7 @@ export function useEngine() {
                 if (rootNode) {
                     rootNode.children?.push(node1, node2);
                 }
+                mathAnim.moveTo({node: node1, xy: vec2.fromValues(100, 100), duration: 10 * 1000});
             }
         };
     }, []);
