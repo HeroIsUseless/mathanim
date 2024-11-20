@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { MathAnim } from "../lib/mathanimv12";
+import { MathAnim } from "../lib/mathanimv13";
 import { vec2 } from "gl-matrix";
 
 export function useEngine() {
@@ -26,7 +26,7 @@ export function useEngine() {
                 }
                 mathAnim.recorder?.start();
                 console.log('mathAnim.recorder', mathAnim.recorder);
-                mathAnim.moveTo({node: node1, xy: vec2.fromValues(100, 100), duration: 2 * 1000});
+                // mathAnim.moveTo({node: node1, xy: vec2.fromValues(100, 100), duration: 2 * 1000});
                 setTimeout(() => {
                     mathAnim.recorder?.stop();
                 }, 2 * 1000);

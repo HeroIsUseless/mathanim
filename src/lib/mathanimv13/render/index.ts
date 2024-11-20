@@ -1,3 +1,4 @@
+import { vec2 } from "gl-matrix";
 import { MathAnim } from "..";
 import { Node } from "../data";
 
@@ -11,7 +12,8 @@ attribute vec3 a_position; // 从缓冲中获取的数据
 // 允许属性获取缓冲：gl.enableVertexAttribArray(positionLoc); // 私下里是用了ARRAY_BUFFER的位置
 // 怎么从缓冲中获取数据传递给属性：gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 attribute vec3 a_color;
-uniform vec3 u_resolution; // 在一次绘制中对所有顶点保持一致值
+uniform vec3 u_translation; // 平移量，uniform应该指的就是最普通的自定义变量
+uniform vec3 u_resolution; // 在一次绘制中对所有顶点保持一致值，或者说，归一化，这是画布的大小
 // 要注意的是全局变量属于单个着色程序，如果多个着色程序有同名全局变量，需要找到每个全局变量并设置自己的值
 varying vec4 v_color;
 // 'varying'的变量将纹理坐标从顶点着色器传到片段着色器
@@ -24,8 +26,10 @@ void main() {
     // 将纹理坐标传给片段着色器
     // GPU会在点之间进行插值
     v_texCoord = a_texCoord;
+    // 加上平移量
+    vec3 position = a_position + u_translation;
     // 从像素坐标转换到 0.0 到 1.0
-    vec3 zeroToOne = a_position / u_resolution;
+    vec3 zeroToOne = position / u_resolution;
     // 再把 0->1 转换 0->2
     vec3 zeroToTwo = zeroToOne * 2.0;
     // 把 0->2 转换到 -1->+1 (裁剪空间)
@@ -122,6 +126,7 @@ export class Render {
         ];
         this.initShaders(vertexShaderCode, fragmentShaderCode);
         this.setBuffer("a_position", vertices);
+        this.setTransform("u_translation", [100, 200, 0]);
         this.setBuffer("a_color", colors);
         this.setUniform("u_resolution");
         this.render();
@@ -176,15 +181,15 @@ export class Render {
     setBuffer(bufferName: string, bufferData: number[]) {
         if (this.gl && this.shaderProgram) {
             // 获取着色器中自定义变量a_position，算是一种引用吧
-            const positionLocation = this.gl.getAttribLocation(this.shaderProgram, bufferName);
+            const attribLocation = this.gl.getAttribLocation(this.shaderProgram, bufferName);
             // gl.createBuffer创建一个缓冲，算是显存里的一个地址引用吧
-            const positionBuffer = this.gl.createBuffer();
+            const buffer = this.gl.createBuffer();
             // gl.bindBuffer是设置缓冲为当前使用缓冲，可以理解为只有一个写缓冲锁，即ARRAY_BUFFER，无法对一个buffer同时写多次
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
             // gl.bufferData将数据拷贝到缓冲，即内存数据写入到缓存数据
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(bufferData), this.gl.STATIC_DRAW);
             // 这个命令是告诉WebGL我们想从缓冲中提供数据，可以理解为打开了读权限或者读锁
-            this.gl.enableVertexAttribArray(positionLocation);
+            this.gl.enableVertexAttribArray(attribLocation);
             // Vertex Array Object-VAO，VAO是一个对象，其中包含一个或者更多的Vertex Buffer Objects VBO
             // 而VBO是Graphics Card中的一个内存缓冲区，用来保存顶点信息，颜色信息，法线信息，纹理坐标信息和索引信息等等。
             // 相当于瓶子中存放的多个VBO中的数据都出来了，一次性并发送到GPU进行绘制。
@@ -193,7 +198,7 @@ export class Render {
             // VAO/VBO可以理解为显存数据，VAO=VBOs
             // 因此VAO这里的描述VBO是怎么样的
             this.gl.vertexAttribPointer( // 这里是设置了一下读取设置
-                positionLocation,
+                attribLocation,
                 3, // 每次迭代运行提取三个单位数据
                 this.gl.FLOAT, // 每个单位的数据类型是32位浮点型
                 false, // 不需要归一化数据
@@ -207,8 +212,14 @@ export class Render {
     setUniform(uniformName: string) {
         if (this.gl && this.shaderProgram && this.mathAnim?.canvas) {
             const resolutionUniformLocation = this.gl.getUniformLocation(this.shaderProgram, uniformName);
-            // gl.uniform3f(resolutionUniformLocation, canvas.width, canvas.height, 1.0);   
             this.gl.uniform3f(resolutionUniformLocation, this.mathAnim?.canvas.width, this.mathAnim?.canvas.height, 1.0);   
+        }
+    }
+
+    setTransform(transformName: string, bufferData: number[]) {
+        if (this.gl && this.shaderProgram) {
+            const transformUniformLocation = this.gl.getUniformLocation(this.shaderProgram, transformName);
+            this.gl.uniform3f(transformUniformLocation, bufferData[0], bufferData[1], bufferData[2]);   
         }
     }
 
@@ -223,3 +234,4 @@ export class Render {
         }
     }
 }
+
