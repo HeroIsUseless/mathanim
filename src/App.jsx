@@ -1,5 +1,5 @@
 import './App.css'
-import { useEngine } from './engine/v12'
+import { useEngine } from './engine/v13'
 
 function App() {
   useEngine()
@@ -12,8 +12,7 @@ function App() {
         <div id='test-img'></div>
         <div id='videoContainer'>    <video width="300"
            height="300"
-           controls="true"
-           autoPlay="true"
+           controls={true}
            id="video"
            ></video></div>
       </div>
