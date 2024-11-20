@@ -3,21 +3,11 @@ import { MathAnim } from "..";
 import { Node } from "../data";
 
 const vertexShaderCode = `
-// 一个属性值，将会从缓冲中获取数据
-attribute vec3 a_position; // 从缓冲中获取的数据
-// 创建缓冲: var buf = gl.createBuffer();
-// 绑定缓冲管道: gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-// 将数据存入缓冲: gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
-// 找到属性所在地址：var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
-// 允许属性获取缓冲：gl.enableVertexAttribArray(positionLoc); // 私下里是用了ARRAY_BUFFER的位置
-// 怎么从缓冲中获取数据传递给属性：gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
+attribute vec4 a_position;
 attribute vec3 a_color;
-uniform vec3 u_translation; // 平移量，uniform应该指的就是最普通的自定义变量
-uniform vec3 u_resolution; // 在一次绘制中对所有顶点保持一致值，或者说，归一化，这是画布的大小
-// 要注意的是全局变量属于单个着色程序，如果多个着色程序有同名全局变量，需要找到每个全局变量并设置自己的值
+uniform vec4 u_translation;
+uniform vec4 u_resolution;
 varying vec4 v_color;
-// 'varying'的变量将纹理坐标从顶点着色器传到片段着色器
-// WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片段着色器
 attribute vec2 a_texCoord;
 varying vec2 v_texCoord;
 void main() {
