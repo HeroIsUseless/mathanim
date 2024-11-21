@@ -1,4 +1,4 @@
-import { vec2 } from "gl-matrix";
+import { mat4, vec2, vec4 } from "gl-matrix";
 import { MathAnim } from "..";
 import { Node } from "../data";
 
@@ -101,6 +101,9 @@ export class Render {
         const y = node.xy[1] || 0;
         const width = node.wh[0] || 100;
         const height = node.wh[1] || 100;
+        // y轴旋转45度
+        const m = mat4.create();
+        mat4.rotate(m, m, Math.PI / 4, [0, 1, 1]);
         // 坐标系在左下
         // 左下，左上，右上，右下
         const vertices = [
@@ -109,6 +112,16 @@ export class Render {
             x + width, y + height, 0.0,
             x + width, y, 0.0
         ];
+        for (let i = 0; i < vertices.length; i += 3) {
+            const x = vertices[i];
+            const y = vertices[i + 1];
+            const z = vertices[i + 2];
+            const newVec4 = vec4.create();
+            vec4.transformMat4(newVec4, [x, y, z, 1], m);
+            vertices[i] = newVec4[0];
+            vertices[i + 1] = newVec4[1];
+            vertices[i + 2] = newVec4[2];
+        }
         let red = 1;
         let green = 0;
         let blue = 0;
@@ -126,7 +139,7 @@ export class Render {
         ];
         this.initShaders(vertexShaderCode, fragmentShaderCode);
         this.setBuffer("a_position", vertices);
-        this.setTransform("u_translation", [100, 200, 0]);
+        this.setTransform("u_translation", [10, 20, 30]);
         this.setBuffer("a_color", colors);
         this.setUniform("u_resolution");
         this.render();
@@ -212,7 +225,7 @@ export class Render {
     setUniform(uniformName: string) {
         if (this.gl && this.shaderProgram && this.mathAnim?.canvas) {
             const resolutionUniformLocation = this.gl.getUniformLocation(this.shaderProgram, uniformName);
-            this.gl.uniform3f(resolutionUniformLocation, this.mathAnim?.canvas.width, this.mathAnim?.canvas.height, 1.0);   
+            this.gl.uniform3f(resolutionUniformLocation, this.mathAnim?.canvas.width, this.mathAnim?.canvas.height, 500.0);   
         }
     }
 
