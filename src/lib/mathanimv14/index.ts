@@ -48,7 +48,7 @@ export class MathAnim {
                     anim?.frameCallback?.(ts);
                 }
             }
-            this.render?.draw(this.data?.tree);
+            this.render?.draw(this.data?.stage);
             if (this.state?.animQueue) {
                 this.state.animQueue = this.state?.animQueue.filter((anim) => {
                     const beginTime = anim?.beginTime || 0;
@@ -60,8 +60,8 @@ export class MathAnim {
         });
     }
 
-    get rootNode(): Node | undefined {
-        return this.data?.tree;
+    get stage(): Cube[] | undefined {
+        return this.data?.stage;
     }
 
     createNode(options: {

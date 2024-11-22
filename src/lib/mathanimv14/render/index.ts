@@ -1,6 +1,6 @@
 import { mat4, vec2, vec4 } from "gl-matrix";
 import { MathAnim } from "..";
-import { Node } from "../data";
+import { Cube, Node } from "../data";
 
 const vertexShaderCode = `
 // 一个属性值，将会从缓冲中获取数据
@@ -81,9 +81,12 @@ export class Render {
         }
         this.isInited = isInited;
     }
-    draw(tree: Node | undefined) {
-        if (tree) {
-            this.drawNodes(tree);
+    draw(stage: Cube[] | undefined) {
+        if (stage) {
+            for (const cube of stage) {
+                this.drawCube(cube);
+            }
+            // this.drawNodes(tree);
         }
     }
 
@@ -94,6 +97,10 @@ export class Render {
                 this.drawNodes(child);
             }
         }
+    }
+
+    drawCube(cube: Cube) {
+        
     }
 
     private drawNode(node: Node) {
