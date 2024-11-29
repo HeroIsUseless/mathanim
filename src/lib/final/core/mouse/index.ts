@@ -9,4 +9,7 @@ export class MouseManager {
         canvas.addEventListener("mousemove", (event) => {});
         canvas.addEventListener("mouseup", (event) => {});
     }
+    distroy() {
+        
+    }
 }

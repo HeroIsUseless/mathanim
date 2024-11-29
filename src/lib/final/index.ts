@@ -1,10 +1,16 @@
 import { MouseManager } from "./core/mouse";
-// 其实问题还是挺大的
 export class Editor {
+    canvas: HTMLCanvasElement;
     // api
-    public canvasApi: any;
+    canvasApi: any;
     // core
     private mouseManager: MouseManager;
-    constructor() {}
-
+    private keyboardManager: any;
+    constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
+        this.mouseManager = new MouseManager(canvas);
+    }
+    distroy() {
+        
+    }
 }
