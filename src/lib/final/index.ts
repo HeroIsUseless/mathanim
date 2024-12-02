@@ -1,16 +1,20 @@
-import { MouseManager } from "./core/mouse";
+import { MouseManager } from "./mouse";
+import { State } from "./state";
 export class Editor {
     canvas: HTMLCanvasElement;
-    // api
     canvasApi: any;
-    // core
+    state: State;
     private mouseManager: MouseManager;
     private keyboardManager: any;
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.mouseManager = new MouseManager(canvas);
+        this.state = new State();
     }
     distroy() {
         
+    }
+    changeToCreateState() {
+        this.state.now = 'create';
     }
 }
