@@ -1,5 +1,7 @@
 # React + Vite
 
+尽量全部使用select
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
